@@ -25,16 +25,10 @@
     max-height: 3rem;
     pointer-events: none;
     opacity: .7;
+    animation: spin infinite 20s linear;
   }
-  
-  @media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-      animation: App-logo-spin infinite 20s linear;
-    }
-  }
-  
-  
-  @keyframes App-logo-spin {
+
+  @-moz-keyframes spin {
     from {
       transform: rotate(0deg);
     }
@@ -42,3 +36,21 @@
       transform: rotate(360deg);
     }
   }
+  @-webkit-keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
