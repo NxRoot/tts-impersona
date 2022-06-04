@@ -42,7 +42,7 @@
     "scripts": {
         "react-start": "cross-env BROWSER=NONE react-scripts start",
         "react-build": "react-scripts build",
-        "electron-start": "electron .",
+        "electron-start": "electron-forge start",
         "electron-build": "electron-builder",
         "rebuild": "electron-rebuild",
         "build": "npm run react-build",

@@ -80,7 +80,7 @@ function App() {
         setText('Loading voices...');
 
         if (voices.length !== 0) {
-            const findVoice = voices.find((c: any) => c.name === settings.voice);
+            const findVoice = voices.find((c: any) => voice ? (c.name === voice) : c.default);
             if (findVoice) {
                 talk.setVolume(settings.volume);
                 talk.setPitch(settings.pitch);

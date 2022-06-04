@@ -19,7 +19,7 @@ export default function ConsoleDrawerSettings({ onVoices, onBack, onChange }: an
         <Box onContextMenu={onBack} borderTop="1px solid rgba(100,100,100,0.3)" overflow="scroll" display="flex" flexDir="column" justifyContent="flex-start" h="100%">
             <Box flex="1" >
                 <Box mb="4" borderBottom="1px solid rgba(100,100,100,0.3)" onClick={onVoices} fontSize={15} _hover={{background: "rgba(0,0,0,0.3)", opacity: 0.8}} opacity={0.7} px="4" py="3" color="gray.100"  cursor="pointer" display="flex" justifyContent="flex-start" alignItems="center" >
-                    Current: <Text color="yellow.500" ml="2">{voice}</Text>
+                    Current: <Text color="yellow.500" ml="2" className="nowrap">{voice}</Text>
                 </Box>
                 <SliderInput max={1} min={0} step={0.1} label="Volume" value={volume} onChange={(val: any) => _onChange(val, setVolume, "volume")}/>
                 <SliderInput max={2} min={0} step={0.1} label="Pitch" value={pitch} onChange={(val: any) => _onChange(val, setPitch, "pitch")}/>

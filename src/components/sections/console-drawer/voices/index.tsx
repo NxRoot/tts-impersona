@@ -15,7 +15,7 @@ export default function ConsoleDrawerVoices({ voices, onClick, onBack }: { voice
 
                         return (
                             <Box key={index} onClick={() => onClick?.(voice)} _hover={{opacity: 0.8}} px="4" py="2.5" color="gray.100" opacity={selected ? 1 : 0.5} bg={selected ? "rgba(0,0,0,0.3)" : undefined} cursor="pointer" display="flex" justifyContent="space-between" alignItems="center" >
-                                <Box fontSize={15}>{voice.name}</Box>
+                                <Box fontSize={15} className="nowrap" mr="10px">{voice.name}</Box>
                                 <Box fontSize={13}>{voice.lang.replace("en-","")}</Box>
                             </Box>
                         )

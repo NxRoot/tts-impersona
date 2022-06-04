@@ -11,6 +11,7 @@ function createWindow(title, windowPath, config, raw) {
         resizable:false,
         maximizable: false,
         transparent: false,
+        autoHideMenuBar: true,
         backgroundColor: 'black',
         width: 600,
         height: 400,
