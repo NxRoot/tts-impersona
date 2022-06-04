@@ -1,0 +1,123 @@
+{
+    "name": "tts-impersona",
+    "version": "0.1.0",
+    "private": false,
+    "description": "Voice Automated System",
+    "author": "nxroot",
+    "build": {
+        "appId": "ra.nxpub.com",
+        "asar": false
+    },
+    "main": "core/electron.js",
+    "homepage": "./",
+    "dependencies": {
+        "@chakra-ui/react": "^1.7.3",
+        "@emotion/react": "^11.7.1",
+        "@emotion/styled": "^11.6.0",
+        "@testing-library/jest-dom": "^5.11.6",
+        "@testing-library/react": "^11.2.1",
+        "@testing-library/user-event": "^12.2.2",
+        "@types/jest": "^26.0.15",
+        "@types/node": "^12.19.5",
+        "@types/react": "^16.9.56",
+        "@types/react-dom": "^16.9.9",
+        "cross-env": "^7.0.2",
+        "electron-is-dev": "^1.2.0",
+        "electron-load-balancer": "^3.0.0",
+        "electron-log": "^4.3.0",
+        "electron-squirrel-startup": "^1.0.0",
+        "framer-motion": "^4.1.17",
+        "fs": "0.0.1-security",
+        "open": "^8.4.0",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
+        "react-laag": "^1.8.0",
+        "react-scripts": "4.0.0",
+        "react-select": "^4.3.1",
+        "react-tooltip": "^4.2.11",
+        "tone": "^14.7.77",
+        "typescript": "^4.0.5",
+        "web-vitals": "^0.2.4"
+    },
+    "scripts": {
+        "react-start": "cross-env BROWSER=NONE react-scripts start",
+        "react-build": "react-scripts build",
+        "electron-start": "electron .",
+        "electron-build": "electron-builder",
+        "rebuild": "electron-rebuild",
+        "build": "npm run react-build",
+        "start": "concurrently 'npm run react-start' 'wait-on http://localhost:3000/ && electron-forge start'",
+        "package": "npm run react-build && electron-forge package",
+        "make": "npm run react-build && electron-forge make"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@electron-forge/cli": "^6.0.0-beta.61",
+        "@electron-forge/maker-deb": "^6.0.0-beta.61",
+        "@electron-forge/maker-rpm": "^6.0.0-beta.61",
+        "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+        "@electron-forge/maker-zip": "^6.0.0-beta.61",
+        "@types/react-select": "^4.0.17",
+        "concurrently": "^5.3.0",
+        "electron": "^11.0.1",
+        "electron-rebuild": "^3.2.5",
+        "prettier": "2.5.1",
+        "wait-on": "^5.2.0"
+    },
+    "config": {
+        "forge": {
+            "packagerConfig": {
+                "dir": "./dist",
+                "out": "./dist",
+                "ignore": [
+                    ".vscode",
+                    ".gitignore",
+                    "tsconfig.json",
+                    "prettier.config.js",
+                    "README.md",
+                    "^/public",
+                    "^/src"
+                ]
+            },
+            "makers": [
+                {
+                    "name": "@electron-forge/maker-squirrel",
+                    "config": {
+                        "name": "tts-impersona"
+                    }
+                },
+                {
+                    "name": "@electron-forge/maker-zip",
+                    "platforms": [
+                        "darwin"
+                    ]
+                },
+                {
+                    "name": "@electron-forge/maker-deb",
+                    "config": {}
+                },
+                {
+                    "name": "@electron-forge/maker-rpm",
+                    "config": {}
+                }
+            ]
+        }
+    }
+}
