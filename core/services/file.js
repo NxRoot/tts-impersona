@@ -44,6 +44,24 @@ class FileService {
         }
         return this
     }
+
+    readImageFolder(){
+        if(this.exists(this.path)) {
+            this.data = fs.readdirSync(this.path, 'utf8').map(dir => {
+
+                const folder = path.join(this.path, dir)
+    
+                const images = fs.readdirSync(path.join(this.path, dir), 'utf8').map(name => {
+                    const valid = !![".jpeg",".jpg",".png"].find(ext => name.toLocaleLowerCase().includes(ext))
+                    const key = name.slice(0, name.indexOf("."))
+                    return { key, path: path.join(folder, name), valid }
+                });
+                
+                return { dir, images }
+            });
+        }
+        return this
+    }
    
     write = (data, path) => {
         fs.writeFileSync(path || this.path, data);

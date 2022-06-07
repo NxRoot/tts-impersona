@@ -1,8 +1,7 @@
 require('dotenv').config();
 const path = require("path");
-const { app , ipcMain } = require("electron");
+const { app , ipcMain, protocol } = require("electron");
 const os = require('os');
-
 const isMac = os.platform() === "darwin";
 const isWindows = os.platform() === "win32";
 
@@ -13,16 +12,18 @@ const appPath = process.execPath
 const FileService = require('./services/file');
 const createWindow = require('./services/window');
 
-const wordsPath = path.join(__dirname, '/config/wordlist.txt')
-const sentencesPath = path.join(__dirname, '/config/sentences.txt')
+const wordsPath = path.join(__dirname, '/config/text/wordlist.txt')
+const sentencesPath = path.join(__dirname, '/config/text/sentences.txt')
+const imagesPath = path.join(__dirname, '/config/images')
 
-const customWordsPath = path.join(appPath, (addonPath + '/config/wordlist.txt'))
-const customSentencesPath = path.join(appPath, (addonPath + '/config/sentences.txt'))
-const customSettingsPath = path.join(appPath, (addonPath + '/config/settings.json'))
+const customWordsPath = path.join(appPath, (addonPath + '/config/text/wordlist.txt'))
+const customSentencesPath = path.join(appPath, (addonPath + '/config/text/sentences.txt'))
+const customSettingsPath = path.join(appPath, (addonPath + '/config/text/settings.json'))
 
 // read startup files
 const wordlist = new FileService(wordsPath).parse()
 const sentences = new FileService(sentencesPath).read()
+const images = new FileService(imagesPath).readImageFolder()
 
 // read custom files
 const customWordlist = new FileService(customWordsPath).parse()
@@ -55,6 +56,14 @@ app.on('activate', () => {
 });
 
 
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = decodeURI(request.url.replace('file:///', ''));
+    callback(pathname);
+  });
+});
+
+
 /* ----------------------------------- main code starts here ------------------------------------- */
 
 function clean(){
@@ -81,6 +90,7 @@ ipcMain.on('get_save_data', (event, args) => {
 
     mainWindow.webContents.send('tts_data', { 
         appPath,
+        images: images.data,
         customWordsPath,
         wordlist: custom ? customWordlist : wordlist, 
         sentences: custom ? customSentences.path : sentences.path,

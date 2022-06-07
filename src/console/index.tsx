@@ -12,16 +12,21 @@ import ConsoleItem from '../components/sections/console-item';
 import ConsolePanel from '../components/sections/console-panel';
 import ConsoleBar from '../components/sections/console-bar';
 import ConsoleDrawer from '../components/sections/console-drawer';
+import ConsoleImage from '../components/sections/console-image';
 
 const { remote } = window.require('electron');
 const logger = remote.require('./logger');
+const test = remote.require('./test');
 
 function ConsolePage() {
     const context = useContext(LocalContext);
     const [playing, setPlaying] = useState(false)
     const [firstLoad, setFirstLoad] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
+    const [image, setImage] = useState('')
     const [complex, setComplex] = useState<any>(context.settings.complex)
+    const [enableImages, setEnableImages] = useState<any>(context.settings.enableImages)
+    const [enableMusic, setEnableMusic] = useState<any>(context.settings.enableMusic)
     const [consoleItems, setConsoleItems] = useState<any[]>([])
 
     const [wordList, setWordList] = useState<any[]>([...new Set([
@@ -38,9 +43,10 @@ function ConsolePage() {
 
     function speakRandom() {
         if(!window.speechSynthesis.speaking){
-            const result = RandomService.getRandom(wordList, true, context.tts.sentences, 1)
-            printConsole(result)
-            return(result)
+            const result = RandomService.getRandom(wordList, true, complex ? context.tts.sentences : '', 1)
+            setImage(result.toLowerCase())
+            printConsole(result.toLowerCase())
+            return(result.toLowerCase())
         }
     }
 
@@ -68,6 +74,16 @@ function ConsolePage() {
         }
         setSetting('complex', checked)
         setComplex(checked)
+    }
+
+    function toggleMusic({target: { checked }}: any){
+        setSetting('music', checked)
+        setEnableMusic(checked)
+    }
+
+    function toggleImages({target: { checked }}: any){
+        setSetting('images', checked)
+        setEnableImages(checked)
     }
 
     function play(){
@@ -115,7 +131,6 @@ function ConsolePage() {
     }
 
     const IconPlaying = playing ? IconPause : IconPlay
-
   
     return (
         <Box className={styles['App']}>
@@ -125,7 +140,10 @@ function ConsolePage() {
                     return (
                         <Box display="flex" justifyContent="flex-start" flexDir="column" h="100%" minH="100%" >
 
-                            <ConsolePanel> { renderItems(items) }  </ConsolePanel>
+                            <ConsolePanel> 
+                                { renderItems(items) }  
+                                {(!firstLoad && enableImages && context.tts.images && context.tts.images.length > 0) && <ConsoleImage text={image}/>}
+                            </ConsolePanel>
                            
                             <ConsoleBar>
                                 <Box flex="1" pl="2" ml="-1px" mt="-0.5">
@@ -134,7 +152,7 @@ function ConsolePage() {
                                 <Box _hover={{transform: "scale(1.1)"}} mr="1" onClick={play}>
                                     <IconPlaying  cursor="pointer"/>
                                 </Box>
-                                <Menu offset={[0,20]} closeOnSelect={false} preventOverflow>
+                                <Menu offset={[0,20]}>
                                     {({ isOpen }) => (
                                         <>
                                             <MenuButton size="sm" as={Box} mx="2" mr="1" cursor="pointer" style={isOpen ? {transform: "scale(1.1)"} :{}} _hover={isOpen ? {} :{transform: "scale(1.1)"}}>
@@ -145,6 +163,16 @@ function ConsolePage() {
                                                     <MenuItem>
                                                         <Checkbox defaultChecked={context.settings.complex} w="100%" value={complex} onChange={toggleComplex}>
                                                             <Text ml="0.5" fontSize={15}>Enable Complexity</Text>
+                                                        </Checkbox>
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        <Checkbox defaultChecked={context.settings.enableImages} w="100%" value={enableImages} onChange={toggleImages}>
+                                                            <Text ml="0.5" fontSize={15}>Enable Image Preview</Text>
+                                                        </Checkbox>
+                                                    </MenuItem>
+                                                    <MenuItem>
+                                                        <Checkbox defaultChecked={context.settings.enableMusic} w="100%" value={enableMusic} onChange={toggleMusic}>
+                                                            <Text ml="0.5" fontSize={15}>Enable Background Music</Text>
                                                         </Checkbox>
                                                     </MenuItem>
                                                 </MenuGroup>

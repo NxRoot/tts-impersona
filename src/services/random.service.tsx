@@ -2,9 +2,10 @@
 const { remote } = window.require('electron');
 const test = remote.require('./test');
 
-const randoms = [
+const randoms: any = [
     () => Math.floor(Math.random() * 369) > 111,
-    (tension = 1) => Math.floor(Math.random() * 111 * tension)
+    (tension = 1) => Math.floor(Math.random() * 111 * tension),
+    (min: number, max: number) => Math.floor(Math.random() * (max - min)) + min
 ]
 
 const suggester = [
@@ -19,7 +20,7 @@ const randomizer = [
 export class RandomService {
 
     private static aiValue: string = ''
-    private static joinLines: boolean = false
+    private static joinLines: boolean = true
     private static tension: number = 1
 
     private static getLine(lines: any[]){
@@ -31,8 +32,8 @@ export class RandomService {
         if(singleWord) return this.getLine(lines)
 
         const a = this.getLine(lines)
-        const s = !suggester ? '' : suggester[suggest as number](a)
-        return (a + (s !== "" ? (", " + s) : "") + (addon ? ", " + randomizer[addon](this.getLine(lines)) : '')) 
+        const s = (!suggester ? '' : suggester[suggest as number](a).split(" ").join(", "))
+        return (a + (s !== "" ? (", " + s) : "") + (addon ? ", " + randomizer[addon](this.getLine(lines)) : ''))
     }
 
     private static simpleSuggestion(lines: string[]){
@@ -45,7 +46,7 @@ export class RandomService {
         const rand2 = randoms[1](this.tension)
         const one = this.joinLines ? rand < rand2 : true
 
-        const sug = this.aiValue ? 0 : false
+        const sug = this.aiValue && this.aiValue !== "" ? (randoms[0]() ? 0 : 1) : 0
         return this.suggest(lines, one, sug, 0)
     }
 

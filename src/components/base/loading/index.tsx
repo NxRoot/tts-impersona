@@ -3,9 +3,9 @@ import MotionDiv from '../motionDiv';
 import Spinner from '../spinner';
 import styles from './index.module.css';
 
-export default function Loader(props: any) {
+export default function Loading(props: any) {
     return props.fade ? (
-        <MotionDiv start={props.fade} duration={props.duration}>
+        <MotionDiv start={Boolean(props.fade)} duration={props.duration}>
             <div className={styles.loader} {...props}>
                 <div style={{ marginBottom: '1rem' }}>
                     <Spinner />

@@ -1,7 +1,6 @@
 import React, { createContext, useEffect } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { useState } from 'react';
-import Loader from '../components/base/loader';
 import useInterval from '../hooks/useInterval';
 import StorageService from '../services/storage.service';
 import TalkingService, { TalkingServiceClass } from '../services/talk.service';
@@ -9,6 +8,7 @@ import ErrorLoader from '../components/base/errorLoader';
 import theme from './theme';
 import useICP from '../hooks/useICP';
 import ConsolePage from '../console';
+import Loading from '../components/base/loading';
 
 const electron = window.require('electron');
 const { ipcRenderer, remote } = electron;
@@ -21,7 +21,9 @@ const default_settings = {
     rate: 1,
     tension: 2,
     delay: 3000,
-    complex: true
+    complex: true,
+    enableImages: false,
+    enableMusic: false,
 };
 
 type LocalContextT = {
@@ -63,6 +65,8 @@ function App() {
     const delay = StorageService.get('delay')
     const tension = StorageService.get('tension')
     const complex = StorageService.get('complex')
+    const enableImages = StorageService.get('images')
+    const enableMusic = StorageService.get('music')
 
     const settings = {
         voice: voice || default_settings.voice,
@@ -72,6 +76,8 @@ function App() {
         delay: delay || default_settings.delay,
         tension: tension || default_settings.tension,
         complex: complex !== null ? complex : default_settings.complex,
+        enableImages: enableImages !== null ? enableImages : default_settings.enableImages,
+        enableMusic: enableMusic !== null ? enableMusic : default_settings.enableMusic,
     };
 
     const voices = talk.getVoices();
@@ -100,7 +106,7 @@ function App() {
         }
     }, !loading ? null : 700);
 
-    if (loading) return <Loader fade={true} text={text} />;
+    if (loading) return <Loading fade="true" text={text} />;
 
     if(!loading){
         if(!voices){
